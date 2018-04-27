@@ -39,7 +39,7 @@ mod ffi {
     pub use self::non_android::*;
 
     // On Android before 5.0, Bionic directly inline these to ioctl() calls.
-    #[inline]
+    // #[inline]
     #[cfg(all(target_os = "android", not(target_arch = "mips")))]
     mod android {
         use libc;

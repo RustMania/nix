@@ -165,12 +165,12 @@ pub const SIGUNUSED : Signal = SIGSYS;
 bitflags!{
     flags SaFlags: libc::c_int {
         const SA_NOCLDSTOP = libc::SA_NOCLDSTOP,
-        const SA_NOCLDWAIT = libc::SA_NOCLDWAIT,
+        const SA_NOCLDWAIT = libc::SA_NOCLDWAIT as i32,
         const SA_NODEFER   = libc::SA_NODEFER,
-        const SA_ONSTACK   = libc::SA_ONSTACK,
+        const SA_ONSTACK   = libc::SA_ONSTACK as i32,
         const SA_RESETHAND = libc::SA_RESETHAND,
         const SA_RESTART   = libc::SA_RESTART,
-        const SA_SIGINFO   = libc::SA_SIGINFO,
+        const SA_SIGINFO   = libc::SA_SIGINFO as i32,
     }
 }
 
@@ -304,8 +304,8 @@ impl SigAction {
             SigHandler::SigAction(f) => unsafe { mem::transmute(f) },
         };
         s.sa_flags = match handler {
-            SigHandler::SigAction(_) => (flags | SA_SIGINFO).bits(),
-            _ => (flags - SA_SIGINFO).bits(),
+            SigHandler::SigAction(_) => (flags | SA_SIGINFO).bits() as u32,
+            _ => (flags - SA_SIGINFO).bits() as u32,
         };
         s.sa_mask = mask.sigset;
 

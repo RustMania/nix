@@ -401,7 +401,7 @@ pub fn listen(sockfd: RawFd, backlog: usize) -> Result<()> {
 pub fn bind(fd: RawFd, addr: &SockAddr) -> Result<()> {
     let res = unsafe {
         let (ptr, len) = addr.as_ffi_pair();
-        ffi::bind(fd, ptr, len)
+        ffi::bind(fd, ptr, len as i32)
     };
 
     Errno::result(res).map(drop)
@@ -624,7 +624,7 @@ pub unsafe fn sockaddr_storage_to_addr(
         }
         consts::AF_INET6 => {
             assert!(len as usize == mem::size_of::<sockaddr_in6>());
-            Ok(SockAddr::Inet(InetAddr::V6((*(addr as *const _ as *const sockaddr_in6)))))
+            Ok(SockAddr::Inet(InetAddr::V6(*(addr as *const _ as *const sockaddr_in6))))
         }
         consts::AF_UNIX => {
             Ok(SockAddr::Unix(UnixAddr(*(addr as *const _ as *const sockaddr_un), len)))

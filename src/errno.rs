@@ -29,13 +29,13 @@ unsafe fn errno_location() -> *mut c_int {
     __dfly_error()
 }
 
-#[cfg(any(target_os = "openbsd", target_os = "netbsd"))]
+#[cfg(any(target_os = "android", target_os = "openbsd", target_os = "netbsd"))]
 unsafe fn errno_location() -> *mut c_int {
     extern { fn __errno() -> *mut c_int; }
     __errno()
 }
 
-#[cfg(any(target_os = "linux", target_os = "android"))]
+#[cfg(target_os = "linux")]
 unsafe fn errno_location() -> *mut c_int {
     extern { fn __errno_location() -> *mut c_int; }
     __errno_location()
